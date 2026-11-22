@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#191715"><meta name="description" content="Онлайн-запис до перукарні Вікторія">
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg"><link rel="stylesheet" href="style.css">
+<title>Перукарня Вікторія</title>
+</head>
+<body>
+<header class="top"><div class="brandmark">✂</div><div><div class="brand">ВІКТОРІЯ</div><div class="subbrand">ПЕРУКАРНЯ · ОНЛАЙН-ЗАПИС</div></div><button class="gear" id="adminOpen" aria-label="Адміністратор">⚙</button></header>
+<main>
+<section class="hero"><div class="eyebrow">ВАШ ЧАС ДЛЯ КРАСИ</div><h1>Турбота про волосся<br><em>починається тут</em></h1><p>Оберіть послугу та зручний час — ми зв’яжемося для підтвердження запису.</p><button class="primary" id="bookNow">Записатися онлайн <span>→</span></button></section>
+<section class="section"><div class="section-head"><div><div class="eyebrow">ПРАЙС</div><h2>Наші послуги</h2></div><span class="muted">орієнтовні ціни</span></div><div id="services" class="service-grid"></div></section>
+<section class="section"><div class="eyebrow">НАТХНЕННЯ</div><h2>Наші роботи</h2><div class="gallery"><div class="gallery-tile t1">Краса<br>у деталях</div><div class="gallery-tile t2">Ваш<br>новий образ</div><div class="gallery-tile t3">Стиль<br>починається тут</div></div><p class="muted small">Фото робіт Вікторія зможе додати в адміністративному кабінеті.</p></section>
+<section class="section"><div class="eyebrow">ВАША ДУМКА ВАЖЛИВА</div><h2>Відгуки клієнтів</h2><div id="reviews" class="review-list"></div><button class="outline" id="reviewOpen">Залишити відгук</button></section>
+<section class="section contact"><div class="eyebrow">МИ НА ВАС ЧЕКАЄМО</div><h2>Контакти</h2><p>Адреса та телефон перукарні будуть додані перед запуском.</p><p class="muted small">Графік роботи: уточнюється</p></section>
+</main>
+<footer>© <span id="year"></span> Перукарня Вікторія <span>·</span> З турботою про вас</footer>
+
+<div class="modal" id="bookingModal"><div class="dialog"><button class="close" data-close>×</button><div class="eyebrow">ОНЛАЙН-ЗАПИС</div><h2>Оберіть послугу</h2><form id="bookingForm">
+<label>Послуга<select id="serviceSelect" required></select></label>
+<div class="two"><label>Дата<input id="date" type="date" required></label><label>Час<select id="time" required></select></label></div>
+<label>Ваше ім’я<input id="clientName" required placeholder="Як до вас звертатися"></label>
+<label>Телефон<input id="phone" type="tel" required placeholder="+380 XX XXX XX XX"></label>
+<label>Коментар (необов’язково)<textarea id="comment" rows="2" placeholder="Побажання до запису"></textarea></label>
+<button class="primary full" type="submit">Надіслати заявку →</button><p class="muted tiny">Заявка очікуватиме підтвердження майстром. У цій демонстрації дані зберігаються лише на цьому пристрої.</p>
+</form></div></div>
+<div class="modal" id="adminModal"><div class="dialog wide"><button class="close" data-close>×</button><div class="eyebrow">ПРИВАТНИЙ РОЗДІЛ</div><h2>Кабінет Вікторії</h2><div id="adminLogin"><p class="muted">Демонстраційний пароль: <b>vika2026</b></p><label>Пароль<input id="adminPassword" type="password" placeholder="Введіть пароль"></label><button class="primary full" id="loginBtn">Увійти</button></div><div id="adminPanel" hidden><div class="tabs"><button class="tab active" data-tab="requests">Заявки</button><button class="tab" data-tab="servicesTab">Послуги</button><button class="tab" data-tab="reviewsTab">Відгуки</button></div><div id="adminContent"></div><button class="outline full" id="logoutBtn">Вийти з кабінету</button></div></div></div>
+<div class="modal" id="reviewModal"><div class="dialog"><button class="close" data-close>×</button><div class="eyebrow">ВІДГУК</div><h2>Поділіться враженням</h2><form id="reviewForm"><label>Ваше ім’я<input id="reviewName" required></label><label>Оцінка<select id="rating"><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option></select></label><label>Відгук<textarea id="reviewText" rows="3" required></textarea></label><button class="primary full">Надіслати відгук</button></form></div></div>
+<div class="toast" id="toast"></div><script src="app.js"></script>
+</body></html>
