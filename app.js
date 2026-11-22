@@ -28,7 +28,7 @@ const today=new Date();$("date").min=new Date(today.getTime()-today.getTimezoneO
 function fillTimes(){let opts=[];for(let h=9;h<=18;h++)for(let m of [0,30]){if(h===18&&m>0)continue;opts.push(`<option>${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}</option>`)}$("time").innerHTML=opts.join("")}fillTimes();
 $("bookingForm").onsubmit=e=>{e.preventDefault();let s=services[+$("serviceSelect").value];bookings.push({id:Date.now(),service:s[0],price:s[2],date:$("date").value,time:$("time").value,name:$("clientName").value,phone:$("phone").value,comment:$("comment").value,status:"Очікує підтвердження"});save();e.target.reset();$("bookingModal").classList.remove("show");toast("Заявку збережено в демонстрації. Майстер має її підтвердити.")};
 $("reviewForm").onsubmit=e=>{e.preventDefault();reviews.unshift({name:$("reviewName").value,rating:$("rating").value,text:$("reviewText").value,approved:false});save();e.target.reset();$("reviewModal").classList.remove("show");toast("Дякуємо! Відгук передано на модерацію.")};
-$("loginBtn").onclick=()=>{if($("adminPassword").value==="vika2026"){$("adminLogin").hidden=true;$("adminPanel").hidden=false;adminTab("requests")}else toast("Неправильний пароль")};
+$("loginBtn").onclick=()=>{if($("adminPassword").value==="Віка226"){$("adminLogin").hidden=true;$("adminPanel").hidden=false;adminTab("requests")}else toast("Неправильний пароль")};
 $("logoutBtn").onclick=()=>{$("adminPanel").hidden=true;$("adminLogin").hidden=false;$("adminPassword").value=""};
 document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>adminTab(b.dataset.tab));
 function adminTab(tab){document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));let c=$("adminContent");if(tab==="requests"){c.innerHTML=bookings.length?bookings.slice().reverse().map(b=>`<div class="admin-item"><b>${esc(b.name)} · ${esc(b.service)}</b><p>${esc(b.date)} о ${esc(b.time)} · ${esc(b.phone)}</p><small>${esc(b.status)} · ${b.price} ₴</small>${b.comment?`<p>${esc(b.comment)}</p>`:""}<div class="actions"><button onclick="setStatus(${b.id},'Підтверджено')">Підтвердити</button><button onclick="setStatus(${b.id},'Потрібно уточнити')">Уточнити</button><button onclick="setStatus(${b.id},'Відхилено')">Відхилити</button></div></div>`).join(""):'<p class="muted">Заявок поки немає.</p>'}else if(tab==="servicesTab"){c.innerHTML=services.map((s,i)=>`<div class="admin-item"><b>${esc(s[0])}</b> · ${s[2]} ₴ <button onclick="editService(${i})">Змінити</button></div>`).join("")+'<button class="outline" onclick="addService()">Додати послугу</button>'}else{c.innerHTML=reviews.map((r,i)=>`<div class="admin-item"><b>${esc(r.name)}</b> · ${"★".repeat(+r.rating)}<p>${esc(r.text)}</p><small>${r.approved===false?"Очікує модерації":"Опубліковано"}</small><div class="actions"><button onclick="approveReview(${i})">Опублікувати</button><button onclick="deleteReview(${i})">Видалити</button></div></div>`).join("")||"Відгуків немає."}}
@@ -39,3 +39,20 @@ window.approveReview=i=>{reviews[i].approved=true;save();renderReviews();adminTa
 function toast(t){$("toast").textContent=t;$("toast").classList.add("show");setTimeout(()=>$("toast").classList.remove("show"),2800)}
 renderServices();renderReviews();
 if("serviceWorker" in navigator)navigator.serviceWorker.register("./sw.js").catch(()=>{});
+
+// Навігація між окремими розділами
+function openPage(id){
+ document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active-page",p.id===id));
+ document.querySelectorAll(".nav-item").forEach(b=>b.classList.toggle("active",b.dataset.page===id));
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+document.querySelectorAll(".nav-item").forEach(b=>b.addEventListener("click",()=>openPage(b.dataset.page)));
+document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>openPage(b.dataset.go)));
+$("enterSite").addEventListener("click",()=>{$("welcome").classList.add("welcome-hide");openPage("homePage")});
+$("welcomeBook").addEventListener("click",()=>{$("welcome").classList.add("welcome-hide");openPage("bookingPage");show("bookingModal")});
+$("installBtn").addEventListener("click",async()=>{
+ if(window.__deferredInstall){window.__deferredInstall.prompt();await window.__deferredInstall.userChoice;window.__deferredInstall=null;}
+ else {$("installHelp").hidden=!$("installHelp").hidden;}
+});
+let installPrompt=null;
+window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();installPrompt=e;window.__deferredInstall=e;$("installBtn").textContent="＋ Встановити програму";});
